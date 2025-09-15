@@ -4,6 +4,7 @@ import { useState } from "react";
 // react-bootstrap:
 import { Col, Row } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
+import { websiteConfig } from "../../../website.config";
 
 export default function Gallery({ images }) {
 	const [show, setShow] = useState(false);
@@ -16,7 +17,7 @@ export default function Gallery({ images }) {
 
 	const Img = ({ src }) => (
 		<img
-			src={"/img/" + src}
+			src={websiteConfig.cmsRootURL + "img/" + src}
 			width="100%"
 			className="mb-3"
 			alt={src
@@ -24,7 +25,7 @@ export default function Gallery({ images }) {
 				.replaceAll(".jpg", "")
 				.replaceAll(".png", "")}
 			onClick={() => {
-				setModalSrc("/img/" + src);
+				setModalSrc(websiteConfig.cmsRootURL + "img/" + src);
 				handleShow();
 			}}
 			style={{ cursor: "pointer" }}

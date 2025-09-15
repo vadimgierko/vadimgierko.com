@@ -74,6 +74,7 @@ export default async function FieldOfInterests({ field }: { field: Category }) {
 			.slice(0, 3)
 			.map((slug) => getFieldItemBySlug({ slug, itemsType: "audios" }))
 	);
+	
 	return (
 		<>
 			<header>

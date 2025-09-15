@@ -2,6 +2,7 @@ import Container from "react-bootstrap/Container";
 import Image from "react-bootstrap/Image";
 import MarkdownRenderer from "../atoms/MarkdownRenderer";
 import { Article as IArticle } from "@/types";
+import { websiteConfig } from "../../../website.config";
 
 export default function Article({ article }: { article: IArticle }) {
 	return (
@@ -12,7 +13,7 @@ export default function Article({ article }: { article: IArticle }) {
 				<p>{article.metadata.description}</p>
 				{article.metadata.img.src && (
 					<Image
-						src={article.metadata.img.src}
+						src={websiteConfig.cmsRootURL + article.metadata.img.src}
 						alt={article.metadata.img.alt}
 						fluid
 					/>
