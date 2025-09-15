@@ -5,6 +5,7 @@ import Layout from "@/layout/index";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { websiteConfig } from "../../website.config";
 import { fetchDomainMetadata } from "@/lib/fetchDomainMetadata";
+import { fetchContent } from "@/lib/fetchContent";
 
 //const domain = cms.domains.values[websiteConfig.domainName];
 
@@ -64,7 +65,7 @@ const TEMPORARY_DOMAIN_LAYOUT = {
 		},
 		brand: {
 			image: {
-				src: "/vadim-gierko-avatar.jpg",
+				src: `${websiteConfig.cmsRootURL}vadim-gierko-avatar.jpg`,
 				alt: "vadim gierko profile picture",
 			},
 			value: "Vadim Gierko",
@@ -72,17 +73,20 @@ const TEMPORARY_DOMAIN_LAYOUT = {
 	},
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const content = await fetchContent();
+
 	return (
 		<html lang="pl" data-bs-theme="dark" data-scroll-behavior="smooth">
 			<body>
 				<Layout
 					localStorageThemeKey={`${websiteConfig.domainName}-theme`}
 					layout={TEMPORARY_DOMAIN_LAYOUT}
+					content={content}
 				>
 					{children}
 				</Layout>

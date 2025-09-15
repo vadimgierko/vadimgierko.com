@@ -5,6 +5,7 @@ import MarkdownRenderer from "@/components/atoms/MarkdownRenderer";
 import IconsList from "@/components/molecules/IconsList";
 import ProjectExternalLinkButton from "./ProjectExternalLinkButton";
 import { Project as IProject } from "@/types";
+import { websiteConfig } from "../../../../website.config";
 
 export default function Project({ project }: { project: IProject }) {
 	return (
@@ -15,7 +16,7 @@ export default function Project({ project }: { project: IProject }) {
 					<hr />
 					<p className="text-center">{project.metadata.description}</p>
 					<Image
-						src={project.metadata.img.src}
+						src={websiteConfig.cmsRootURL + project.metadata.img.src}
 						alt={project.metadata.img.alt}
 						fluid
 					/>

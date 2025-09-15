@@ -3,6 +3,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeHighlight from "rehype-highlight";
 import Link from "next/link";
+import { websiteConfig } from "../../../website.config";
 
 // convert all internal links into React Router link,
 // open external links in the new tab,
@@ -29,7 +30,17 @@ export default function MarkdownRenderer({ markdown }) {
 				// emables code highlighting:
 				rehypeHighlight,
 			]}
-			components={{ a: NextLink }}
+			components={{
+				a: NextLink,
+				// add websiteConfig to images
+				img: ({ src, alt, ...props }) => {
+					// Prevent double prefixing absolute URLs
+					const finalSrc = src?.startsWith("http")
+						? src
+						: `${websiteConfig.cmsRootURL}${src}`;
+					return <img src={finalSrc} alt={alt || ""} {...props} />;
+				},
+			}}
 		>
 			{markdown}
 		</ReactMarkdown>

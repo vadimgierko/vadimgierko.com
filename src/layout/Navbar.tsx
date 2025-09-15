@@ -17,7 +17,7 @@ import {
 } from "react-icons/bs";
 // next.js:
 import Link from "next/link";
-import { Domain, ItemsType, SocialLinkName, Theme } from "@/types";
+import { Content, Domain, ItemsType, SocialLinkName, Theme } from "@/types";
 import { ReactNode, useEffect, useState } from "react";
 import { NavDropdown } from "react-bootstrap";
 
@@ -33,10 +33,12 @@ export function NavigationBar({
 	brand,
 	links,
 	localStorageThemeKey: LOCAL_STORAGE_THEME_KEY,
+	content
 }: {
 	localStorageThemeKey: Domain["localStorageThemeKey"];
 	brand: Domain["layout"]["navbar"]["brand"];
 	links: Domain["layout"]["navbar"]["links"];
+	content: Content | undefined
 }) {
 	const {
 		social: SOCIAL_LINKS,
@@ -91,7 +93,7 @@ export function NavigationBar({
 							<Nav.Link>{links.about.value}</Nav.Link>
 						</Link>
 
-						{Object.keys(CATEGORIES_LINKS).map((categoryName) => (
+						{content && Object.keys(CATEGORIES_LINKS).map((categoryName) => (
 							<NavDropdown
 								key={categoryName}
 								title={CATEGORIES_LINKS[categoryName]}

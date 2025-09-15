@@ -8,6 +8,9 @@ import Project from "@/components/organisms/Project";
 import { Metadata } from "next";
 import { DevProject } from "@/types";
 import { fetchContent } from "@/lib/fetchContent";
+import getRepoDataFromGitHub from "@/lib/github/getRepoDataFromGitHub";
+import getRepoReadmeFileContentFromGitHub from "@/lib/github/getRepoReadmeFileContentFromGitHub";
+import checkGithubApiTokenRateLimits from "@/lib/github/checkGithubApiTokenRateLimits";
 
 type SlugPageParams = { slug: string };
 
@@ -98,46 +101,46 @@ export default async function Page({
 	// const isDevProject: boolean = pageContent.pageType === "devProject";
 	// console.log("isDevProject:", isDevProject);
 
-	// async function getDevProjectData(
-	// 	devProject: DevProject
-	// ): Promise<DevProject> {
-	// 	// FETCH REPO DATA FROM GITHUB ONLY IF PROJECT IS PUBLIC:
-	// 	const repoData = await getRepoDataFromGitHub(devProject.props.repoName);
-	// 	const readmeMarkdown = await getRepoReadmeFileContentFromGitHub(
-	// 		repoData.name
-	// 	);
-	// 	await checkGithubApiTokenRateLimits();
+	async function getDevProjectData(
+		devProject: DevProject
+	): Promise<DevProject> {
+		// FETCH REPO DATA FROM GITHUB ONLY IF PROJECT IS PUBLIC:
+		const repoData = await getRepoDataFromGitHub(devProject.props.repoName);
+		const readmeMarkdown = await getRepoReadmeFileContentFromGitHub(
+			repoData.name
+		);
+		await checkGithubApiTokenRateLimits();
 
-	// 	// replace readme's h1 with h2:
-	// 	const fixedMarkdown = readmeMarkdown.replace("#", "##");
+		// replace readme's h1 with h2:
+		const fixedMarkdown = readmeMarkdown.replace("#", "##");
 
-	// 	const updatedDevProject: DevProject = {
-	// 		category: "web-development",
-	// 		itemType: "devProject",
-	// 		metadata: {
-	// 			...devProject.metadata,
-	// 			description: repoData.description,
-	// 		},
-	// 		props: {
-	// 			...devProject.props,
-	// 			content: fixedMarkdown,
-	// 			externalLinks: [
-	// 				{
-	// 					icon: "github",
-	// 					link: "https://github.com/vadimgierko/" + repoData.name,
-	// 					description: "Zobacz kod na GitHub",
-	// 				},
-	// 				{
-	// 					icon: "global",
-	// 					link: repoData.homepage,
-	// 					description: "Strona www projektu",
-	// 				},
-	// 			],
-	// 		},
-	// 	};
+		const updatedDevProject: DevProject = {
+			category: "web-development",
+			itemType: "devProject",
+			metadata: {
+				...devProject.metadata,
+				description: repoData.description,
+			},
+			props: {
+				...devProject.props,
+				content: fixedMarkdown,
+				externalLinks: [
+					{
+						icon: "github",
+						link: "https://github.com/vadimgierko/" + repoData.name,
+						description: "Zobacz kod na GitHub",
+					},
+					{
+						icon: "global",
+						link: repoData.homepage,
+						description: "Strona www projektu",
+					},
+				],
+			},
+		};
 
-	// 	return updatedDevProject;
-	// }
+		return updatedDevProject;
+	}
 
 	if (pageData.pageType === "category")
 		return <FieldOfInterests field={content.categories[pageData.slug]} />;
@@ -147,13 +150,13 @@ export default async function Page({
 			return <Article article={content.items["articles"][pageData.slug]} />;
 		case "project":
 			return <Project project={content.items["projects"][pageData.slug]} />;
-		// case "devProject":
-		// 	return (
-		// 		<Project
-		// 			project={await getDevProjectData(
-		// 				content.items["projects"][pageData.slug] as DevProject
-		// 			)}
-		// 		/>
-		// 	);
+		case "devProject":
+			return (
+				<Project
+					project={await getDevProjectData(
+						content.items["projects"][pageData.slug] as DevProject
+					)}
+				/>
+			);
 	}
 }
