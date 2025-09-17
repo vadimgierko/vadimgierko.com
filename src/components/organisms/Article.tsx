@@ -13,7 +13,7 @@ export default function Article({ article }: { article: IArticle }) {
 				<p>{article.metadata.description}</p>
 				{article.metadata.img.src && (
 					<Image
-						src={websiteConfig.cmsRootURL + article.metadata.img.src}
+						src={`${websiteConfig.cmsRootURL}/${article.metadata.img.src}`}
 						alt={article.metadata.img.alt}
 						fluid
 					/>

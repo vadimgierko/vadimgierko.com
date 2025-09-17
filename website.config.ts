@@ -1,9 +1,15 @@
 export const websiteConfig: {
-	domainName: string;
+	domain: {
+		name: string;
+		gaId: string;
+	}
 	cmsURL: string;
 	cmsRootURL: string;
 } = {
-	domainName: "vadimgierko.com",
-	cmsURL: "https://vadimgierko.com/cms/v0",
-	cmsRootURL: "https://vadimgierko.com/"
+	domain: {
+		name: "vadimgierko.com",
+		gaId: "G-SDYR1XY35B"
+	},
+	cmsURL: "https://cms.vadimgierko.com/cms/v0",
+	cmsRootURL: "https://cms.vadimgierko.com"
 };

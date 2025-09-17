@@ -37,7 +37,7 @@ export default function MarkdownRenderer({ markdown }) {
 					// Prevent double prefixing absolute URLs
 					const finalSrc = src?.startsWith("http")
 						? src
-						: `${websiteConfig.cmsRootURL}${src}`;
+						: `${websiteConfig.cmsRootURL}/${src}`;
 					return <img src={finalSrc} alt={alt || ""} {...props} />;
 				},
 			}}

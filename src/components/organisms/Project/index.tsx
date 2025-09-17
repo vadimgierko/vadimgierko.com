@@ -16,7 +16,7 @@ export default function Project({ project }: { project: IProject }) {
 					<hr />
 					<p className="text-center">{project.metadata.description}</p>
 					<Image
-						src={websiteConfig.cmsRootURL + project.metadata.img.src}
+						src={`${websiteConfig.cmsRootURL}/${project.metadata.img.src}`}
 						alt={project.metadata.img.alt}
 						fluid
 					/>

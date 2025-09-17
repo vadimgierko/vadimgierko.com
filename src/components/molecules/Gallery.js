@@ -17,7 +17,7 @@ export default function Gallery({ images }) {
 
 	const Img = ({ src }) => (
 		<img
-			src={websiteConfig.cmsRootURL + "img/" + src}
+			src={websiteConfig.cmsRootURL + "/img/" + src}
 			width="100%"
 			className="mb-3"
 			alt={src
@@ -25,7 +25,7 @@ export default function Gallery({ images }) {
 				.replaceAll(".jpg", "")
 				.replaceAll(".png", "")}
 			onClick={() => {
-				setModalSrc(websiteConfig.cmsRootURL + "img/" + src);
+				setModalSrc(websiteConfig.cmsRootURL + "/img/" + src);
 				handleShow();
 			}}
 			style={{ cursor: "pointer" }}

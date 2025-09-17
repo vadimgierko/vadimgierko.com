@@ -4,7 +4,7 @@ import { websiteConfig } from "../../website.config";
 export async function fetchDomainMetadata() {
 	try {
 		const res = await fetch(
-			`${websiteConfig.cmsURL}/domains/${websiteConfig.domainName}/metadata/index.json`
+			`${websiteConfig.cmsURL}/domains/${websiteConfig.domain.name}/metadata/index.json`
 		);
 		const domainMetadata = await res.json();
 		return domainMetadata as Domain["metadata"];

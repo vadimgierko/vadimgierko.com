@@ -6,7 +6,7 @@ import Icon from "@/components/atoms/Icon";
 import { icons } from "@/content/icons";
 import { websiteConfig } from "../../../../website.config";
 
-const localStorageThemeKey = websiteConfig.domainName + "-theme";
+const localStorageThemeKey = websiteConfig.domain.name + "-theme";
 
 export default function ProjectExternalLinkButton({
 	link,

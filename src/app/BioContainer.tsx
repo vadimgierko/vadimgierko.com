@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { Container, Image } from "react-bootstrap";
 import MarkdownRenderer from "../components/atoms/MarkdownRenderer";
+import { websiteConfig } from "../../website.config";
 
 const bio = {
-	img: "https://vadimgierko.com/vadim-gierko-avatar.jpg",
+	img: `${websiteConfig.cmsRootURL}/vadim-gierko-avatar.jpg`,
 	title: "Cześć 👋",
 	description: `
 Nazywam się Vadim Gierko.

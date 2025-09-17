@@ -7,8 +7,6 @@ import { websiteConfig } from "../../website.config";
 import { fetchDomainMetadata } from "@/lib/fetchDomainMetadata";
 import { fetchContent } from "@/lib/fetchContent";
 
-//const domain = cms.domains.values[websiteConfig.domainName];
-
 export async function generateMetadata(): Promise<Metadata> {
 	const domainMetadata = await fetchDomainMetadata();
 	if (!domainMetadata) return {};
@@ -65,7 +63,7 @@ const TEMPORARY_DOMAIN_LAYOUT = {
 		},
 		brand: {
 			image: {
-				src: `${websiteConfig.cmsRootURL}vadim-gierko-avatar.jpg`,
+				src: `${websiteConfig.cmsRootURL}/vadim-gierko-avatar.jpg`,
 				alt: "vadim gierko profile picture",
 			},
 			value: "Vadim Gierko",
@@ -84,14 +82,14 @@ export default async function RootLayout({
 		<html lang="pl" data-bs-theme="dark" data-scroll-behavior="smooth">
 			<body>
 				<Layout
-					localStorageThemeKey={`${websiteConfig.domainName}-theme`}
+					localStorageThemeKey={`${websiteConfig.domain.name}-theme`}
 					layout={TEMPORARY_DOMAIN_LAYOUT}
 					content={content}
 				>
 					{children}
 				</Layout>
 			</body>
-			{/* <GoogleAnalytics gaId={domain.gaId} /> */}
+			<GoogleAnalytics gaId={websiteConfig.domain.gaId} />
 		</html>
 	);
 }
