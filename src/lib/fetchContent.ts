@@ -1,7 +1,7 @@
 import { Content } from "@/types";
 import { websiteConfig } from "../../website.config";
 
-export async function fetchContent() {
+async function fetchContent() {
 	try {
 		const res = await fetch(`${websiteConfig.cmsURL}/content.json`);
 		const content = await res.json();

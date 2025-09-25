@@ -5,7 +5,6 @@ import Layout from "@/layout/index";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { websiteConfig } from "../../website.config";
 import { fetchDomainMetadata } from "@/lib/fetchDomainMetadata";
-import { fetchContent } from "@/lib/fetchContent";
 
 export async function generateMetadata(): Promise<Metadata> {
 	const domainMetadata = await fetchDomainMetadata();
@@ -76,15 +75,12 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const content = await fetchContent();
-
 	return (
 		<html lang="pl" data-bs-theme="dark" data-scroll-behavior="smooth">
 			<body>
 				<Layout
 					localStorageThemeKey={`${websiteConfig.domain.name}-theme`}
 					layout={TEMPORARY_DOMAIN_LAYOUT}
-					content={content}
 				>
 					{children}
 				</Layout>

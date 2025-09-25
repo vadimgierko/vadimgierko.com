@@ -10,23 +10,17 @@ import Icon from "@/components/atoms/Icon";
 // next.js:
 import Link from "next/link";
 import BioContainer from "./BioContainer";
-import { fetchContent } from "@/lib/fetchContent";
+import { websiteConfig } from "../../website.config";
+import { Content } from "@/types";
 
 export default async function Home() {
-	const content = await fetchContent();
-	if (!content)
-		return (
-			<p className="text-danger text-danger">No content fetched from CMS...</p>
-		);
-
-	const categories = Object.keys(content.categories).map(
-		(categoryName) => content.categories[categoryName]
-	);
+	const res = await fetch(websiteConfig.cmsRootURL + "/api/v1/categories");
+	const categories = (await res.json()) as Content["categories"];
 
 	return (
 		<>
 			<BioContainer />
-			{categories.map((category) => (
+			{Object.values(categories).map((category) => (
 				<Section key={category.metadata.link}>
 					{category.props.icon && (
 						<Icon IconType={icons[category.props.icon].Icon} size={80} />

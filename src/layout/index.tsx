@@ -2,18 +2,16 @@ import ScrollToTop from "@/components/atoms/ScrollToTop";
 import { ReactNode } from "react";
 import { Footer } from "./Footer";
 import { NavigationBar } from "./Navbar";
-import { Content, Domain } from "@/types";
+import { Domain } from "@/types";
 
 export default function Layout({
 	children,
 	localStorageThemeKey,
 	layout,
-	content
 }: {
 	children: ReactNode;
 	localStorageThemeKey: Domain["localStorageThemeKey"];
 	layout: Domain["layout"];
-	content: Content | undefined
 }) {
 	return (
 		<div
@@ -27,7 +25,6 @@ export default function Layout({
 				localStorageThemeKey={localStorageThemeKey}
 				brand={layout.navbar.brand}
 				links={layout.navbar.links}
-				content={content}
 			/>
 			<main
 				style={{

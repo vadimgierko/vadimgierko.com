@@ -20,6 +20,7 @@ import Link from "next/link";
 import { Content, Domain, ItemsType, SocialLinkName, Theme } from "@/types";
 import { ReactNode, useEffect, useState } from "react";
 import { NavDropdown } from "react-bootstrap";
+import { websiteConfig } from "../../website.config";
 
 const SOCIAL_LINKS_OBJECTS: { [key in SocialLinkName]: ReactNode } = {
 	facebook: <BsFacebook />,
@@ -33,12 +34,10 @@ export function NavigationBar({
 	brand,
 	links,
 	localStorageThemeKey: LOCAL_STORAGE_THEME_KEY,
-	content
 }: {
 	localStorageThemeKey: Domain["localStorageThemeKey"];
 	brand: Domain["layout"]["navbar"]["brand"];
 	links: Domain["layout"]["navbar"]["links"];
-	content: Content | undefined
 }) {
 	const {
 		social: SOCIAL_LINKS,
@@ -47,6 +46,7 @@ export function NavigationBar({
 	} = links;
 
 	const [theme, setTheme] = useState<Theme>("dark");
+	const [categories, setCategories] = useState<Content["categories"]>();
 
 	function switchTheme() {
 		const newTheme: Theme = theme === "dark" ? "light" : "dark";
@@ -66,6 +66,16 @@ export function NavigationBar({
 			document.documentElement.setAttribute("data-bs-theme", "dark");
 		}
 	}, [LOCAL_STORAGE_THEME_KEY]);
+
+	useEffect(() => {
+		async function fetchCategories() {
+			const res = await fetch(websiteConfig.cmsRootURL + "/api/v1/categories");
+			const data = (await res.json()) as Content["categories"];
+			setCategories(data);
+		}
+
+		fetchCategories();
+	}, []);
 
 	return (
 		<Navbar
@@ -93,31 +103,30 @@ export function NavigationBar({
 							<Nav.Link>{links.about.value}</Nav.Link>
 						</Link>
 
-						{content && Object.keys(CATEGORIES_LINKS).map((categoryName) => (
+						{Object.keys(CATEGORIES_LINKS).map((categoryName) => (
 							<NavDropdown
 								key={categoryName}
 								title={CATEGORIES_LINKS[categoryName]}
 							>
-								{Object.keys(ITEMS_LINKS).map(
-									(itemsType) =>
-										/** CONDITIONALLY RENDER FIELD ITEMS IF EXIST */
-										Object.keys(
-											content.categories[categoryName].items[
-												itemsType as ItemsType
-											]
-										).length > 0 && (
-											<Link
-												key={categoryName + "-" + itemsType}
-												href={`/${categoryName}/${itemsType}`}
-												passHref
-												legacyBehavior
-											>
-												<NavDropdown.Item>
-													{ITEMS_LINKS[itemsType as ItemsType]}
-												</NavDropdown.Item>
-											</Link>
-										)
-								)}
+								{categories &&
+									Object.keys(ITEMS_LINKS).map(
+										(itemsType) =>
+											/** CONDITIONALLY RENDER FIELD ITEMS IF EXIST */
+											Object.keys(
+												categories[categoryName].items[itemsType as ItemsType]
+											).length > 0 && (
+												<Link
+													key={categoryName + "-" + itemsType}
+													href={`/${categoryName}/${itemsType}`}
+													passHref
+													legacyBehavior
+												>
+													<NavDropdown.Item>
+														{ITEMS_LINKS[itemsType as ItemsType]}
+													</NavDropdown.Item>
+												</Link>
+											)
+									)}
 								<NavDropdown.Divider />
 								<NavDropdown.Item href={`/${categoryName}`}>
 									wszystko

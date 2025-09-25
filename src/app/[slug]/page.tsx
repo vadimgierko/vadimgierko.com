@@ -6,13 +6,45 @@ import Article from "@/components/organisms/Article";
 import Project from "@/components/organisms/Project";
 // lib:
 import { Metadata } from "next";
-import { DevProject } from "@/types";
-import { fetchContent } from "@/lib/fetchContent";
+import {
+	Article as IArticle,
+	Audio,
+	Category,
+	Content,
+	DevProject,
+	Page as IPage,
+	Image,
+	Project as IProject,
+	Video,
+} from "@/types";
 import getRepoDataFromGitHub from "@/lib/github/getRepoDataFromGitHub";
 import getRepoReadmeFileContentFromGitHub from "@/lib/github/getRepoReadmeFileContentFromGitHub";
 import checkGithubApiTokenRateLimits from "@/lib/github/checkGithubApiTokenRateLimits";
+import { websiteConfig } from "../../../website.config";
 
 type SlugPageParams = { slug: string };
+
+export async function fetchPage(pageData: IPage, slug: string) {
+	const res = await fetch(
+		websiteConfig.cmsRootURL +
+			`/api/v1/${
+				pageData.pageType === "category"
+					? "categories"
+					: pageData.props.itemsType
+			}/` +
+			slug
+	);
+
+	const page = (await res.json()) as
+		| Category
+		| IArticle
+		| Audio
+		| Image
+		| IProject
+		| Video;
+
+	return page;
+}
 
 export async function generateMetadata({
 	params,
@@ -21,19 +53,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
 	const slug = (await params).slug;
 
-	const content = await fetchContent();
-	if (!content) return {};
-
-	//=== ❗❗❗ 👇TODO: EXTRACT AS getPageMetadata(slug)👇 ===❗❗❗
-	const pageData = content.pages[slug];
+	const res = await fetch(websiteConfig.cmsRootURL + "/api/v1/pages/" + slug);
+	const pageData = (await res.json()) as IPage;
 
 	if (!pageData) return {};
 
-	const pageMetadata =
-		pageData.pageType === "category"
-			? content.categories[slug].metadata
-			: content.items[pageData.props.itemsType][slug].metadata;
-	//=== ❗❗❗ 👆TODO: EXTRACT AS getPageMetadata(slug)👆 ===❗❗❗
+	const page = await fetchPage(pageData, slug);
+	const { metadata: pageMetadata } = page;
 
 	if (!pageMetadata) return {};
 
@@ -58,11 +84,11 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-	const content = await fetchContent();
-	if (!content) return [];
+	const res = await fetch(websiteConfig.cmsRootURL + "/api/v1/pages");
+	const pages = (await res.json()) as Content["pages"];
 
 	//=== ❗❗❗ 👇TODO: EXTRACT AS getAllPagesSlugs👇 ===❗❗❗
-	const slugs = Object.keys(content.pages);
+	const slugs = Object.keys(pages);
 	//=== ❗❗❗ 👆TODO: EXTRACT AS getAllPagesSlugs👆 ===❗❗❗
 
 	const params: SlugPageParams[] = slugs.map((slug) => ({
@@ -79,23 +105,12 @@ export default async function Page({
 }) {
 	const slug = (await params).slug; // ❗❗❗
 
-	const content = await fetchContent();
-	if (!content)
-		return (
-			<p className="text-danger text-danger">No content fetched from CMS...</p>
-		);
-	//=== ❗❗❗ 👇TODO: EXTRACT AS getPageMetadata(slug)👇 ===❗❗❗
-	const pageData = content.pages[slug];
+	const res = await fetch(websiteConfig.cmsRootURL + "/api/v1/pages/" + slug);
+	const pageData = (await res.json()) as IPage;
 
 	if (!pageData) return notFound();
 
-	const page =
-		pageData.pageType === "category"
-			? content.categories[slug]
-			: content.items[pageData.props.itemsType][slug];
-	//=== ❗❗❗ 👆TODO: EXTRACT AS getPageMetadata(slug)👆 ===❗❗❗
-
-	const {} = page;
+	const page = await fetchPage(pageData, slug);
 
 	//================= FOR DEV PROJECTS ==================:
 	// const isDevProject: boolean = pageContent.pageType === "devProject";
@@ -143,20 +158,14 @@ export default async function Page({
 	}
 
 	if (pageData.pageType === "category")
-		return <FieldOfInterests field={content.categories[pageData.slug]} />;
+		return <FieldOfInterests field={page as Category} />;
 
 	switch (pageData.props.itemType) {
 		case "article":
-			return <Article article={content.items["articles"][pageData.slug]} />;
+			return <Article article={page as IArticle} />;
 		case "project":
-			return <Project project={content.items["projects"][pageData.slug]} />;
+			return <Project project={page as IProject} />;
 		case "devProject":
-			return (
-				<Project
-					project={await getDevProjectData(
-						content.items["projects"][pageData.slug] as DevProject
-					)}
-				/>
-			);
+			return <Project project={await getDevProjectData(page as DevProject)} />;
 	}
 }

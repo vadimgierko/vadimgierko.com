@@ -11,9 +11,10 @@ import Gallery from "@/components/molecules/Gallery";
 // content:
 import { icons } from "@/content/icons";
 import { notFound } from "next/navigation";
-import { allowedItemsTypes, ItemsType } from "@/types";
+import { allowedItemsTypes, Category, Content, ItemsType, Page } from "@/types";
 import { getFieldItemBySlug } from "@/components/organisms/Category";
-import { fetchContent } from "@/lib/fetchContent";
+import { websiteConfig } from "../../../../website.config";
+import { fetchPage } from "../page";
 
 type ItemsPageParams = { slug: string; items: ItemsType };
 
@@ -23,15 +24,13 @@ export async function generateMetadata({
 	params: Promise<ItemsPageParams>;
 }) {
 	const slug = (await params).slug;
-	const content = await fetchContent();
-	if (!content) return {};
-	//=== ❗❗❗ 👇TODO: EXTRACT AS getPageMetadata(slug)👇 ===❗❗❗
-	const slugPageData = content.pages[slug];
+	const res = await fetch(websiteConfig.cmsRootURL + "/api/v1/pages/" + slug);
+	const slugPageData = (await res.json()) as Page;
 
 	if (!slugPageData || slugPageData.pageType !== "category") return {};
 
-	const slugPageMetadata = content.categories[slug].metadata;
-	//=== ❗❗❗ 👆TODO: EXTRACT AS getPageMetadata(slug)👆 ===❗❗❗
+	const slugPage = await fetchPage(slugPageData, slug);
+	const { metadata: slugPageMetadata } = slugPage;
 
 	const itemsType = (await params).items;
 
@@ -54,10 +53,11 @@ export async function generateMetadata({
 export async function generateStaticParams() {
 	const params: ItemsPageParams[] = [];
 
-	const content = await fetchContent();
-	if (!content) return [];
+	const res = await fetch(websiteConfig.cmsRootURL + "/api/v1/categories");
+	const categories = (await res.json()) as Content["categories"];
+	if (!categories) return [];
 
-	Object.keys(content.categories).forEach((categoryName) =>
+	Object.keys(categories).forEach((categoryName) =>
 		allowedItemsTypes.forEach((itemsType) =>
 			params.push({ slug: categoryName, items: itemsType })
 		)
@@ -74,18 +74,11 @@ export default async function ItemsPage({
 	//====================== FIELD DATA ====================//
 	const slug = (await params).slug; // ❗❗❗
 
-	const content = await fetchContent();
+	const res = await fetch(
+		websiteConfig.cmsRootURL + "/api/v1/categories/" + slug
+	);
 
-	if (!content)
-		return (
-			<p className="text-danger text-danger">No content fetched from CMS...</p>
-		);
-
-	const pageData = content.pages[slug];
-
-	if (!pageData || pageData.pageType !== "category") return notFound();
-
-	const category = content.categories[slug];
+	const category = (await res.json()) as Category;
 
 	//====================== ITEMS DATA ====================//
 	const itemsType = (await params).items;

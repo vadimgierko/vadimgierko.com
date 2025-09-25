@@ -22,20 +22,8 @@ import { GiMusicalNotes } from "react-icons/gi";
 import { BsImages } from "react-icons/bs";
 // next.js:
 import Link from "next/link";
-import { Audio, Category, Video, ItemsType } from "@/types";
-import { fetchContent } from "@/lib/fetchContent";
-
-// function getFieldItems(field: Field): NewItem[] {
-// 	const items: NewItem[] = [];
-
-// 	Object.keys(field.items).forEach((itemsType) =>
-// 		Object.keys(content.items[itemsType as ItemsType]).forEach((slug) =>
-// 			items.push(content.items[itemsType as ItemsType][slug])
-// 		)
-// 	);
-
-// 	return items;
-// }
+import { Audio, Category, Video, ItemsType, Item } from "@/types";
+import { websiteConfig } from "../../../website.config";
 
 export async function getFieldItemBySlug({
 	slug,
@@ -44,13 +32,30 @@ export async function getFieldItemBySlug({
 	slug: string;
 	itemsType: ItemsType;
 }) {
-	const content = await fetchContent();
+	if (itemsType === "audios") {
+		const res = await fetch(
+			websiteConfig.cmsRootURL +
+				`/api/v1/items?category=music&itemsType=${itemsType}`
+		);
+		const audios = (await res.json()) as { [key: string]: Audio };
+		return audios[slug];
+	} else if (itemsType === "videos") {
+		const res = await fetch(
+			websiteConfig.cmsRootURL + `/api/v1/items?itemsType=${itemsType}`
+		);
+		const videos = (await res.json()) as { [key: string]: Video };
+		return videos[slug];
+	} else {
+		const res = await fetch(
+			websiteConfig.cmsRootURL + "/api/v1/" + itemsType + "/" + slug
+		);
 
-	const item = content?.items[itemsType][slug];
+		const item = (await res.json()) as Item;
 
-	if (!item) return undefined;
+		if (!item) return undefined;
 
-	return item;
+		return item;
+	}
 }
 
 export default async function FieldOfInterests({ field }: { field: Category }) {
@@ -74,7 +79,7 @@ export default async function FieldOfInterests({ field }: { field: Category }) {
 			.slice(0, 3)
 			.map((slug) => getFieldItemBySlug({ slug, itemsType: "audios" }))
 	);
-	
+
 	return (
 		<>
 			<header>

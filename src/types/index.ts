@@ -123,6 +123,7 @@ type ItemPage = BasePage<"item", string> & {
 	};
 };
 
+export type Page = CategoryPage | ItemPage;
 //=============================== CONTENT ================================//
 
 export type Content = {
