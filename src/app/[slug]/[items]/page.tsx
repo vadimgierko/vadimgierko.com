@@ -11,10 +11,14 @@ import Gallery from "@/components/molecules/Gallery";
 // content:
 import { icons } from "@/content/icons";
 import { notFound } from "next/navigation";
-import { allowedItemsTypes, Category, Content, ItemsType, Page } from "@/types";
+import { allowedItemsTypes, ItemsType } from "@/types";
 import { getFieldItemBySlug } from "@/components/organisms/Category";
-import { websiteConfig } from "../../../../website.config";
-import { fetchPage } from "../page";
+import {
+	fetchCategories,
+	fetchCategory,
+	fetchPage,
+	fetchPageData,
+} from "@/lib/api/v1";
 
 type ItemsPageParams = { slug: string; items: ItemsType };
 
@@ -24,12 +28,14 @@ export async function generateMetadata({
 	params: Promise<ItemsPageParams>;
 }) {
 	const slug = (await params).slug;
-	const res = await fetch(websiteConfig.cmsRootURL + "/api/v1/pages/" + slug);
-	const slugPageData = (await res.json()) as Page;
+	const slugPageData = await fetchPageData(slug);
 
 	if (!slugPageData || slugPageData.pageType !== "category") return {};
 
 	const slugPage = await fetchPage(slugPageData, slug);
+
+	if (!slugPage) return {};
+
 	const { metadata: slugPageMetadata } = slugPage;
 
 	const itemsType = (await params).items;
@@ -53,8 +59,8 @@ export async function generateMetadata({
 export async function generateStaticParams() {
 	const params: ItemsPageParams[] = [];
 
-	const res = await fetch(websiteConfig.cmsRootURL + "/api/v1/categories");
-	const categories = (await res.json()) as Content["categories"];
+	const categories = await fetchCategories();
+
 	if (!categories) return [];
 
 	Object.keys(categories).forEach((categoryName) =>
@@ -74,11 +80,9 @@ export default async function ItemsPage({
 	//====================== FIELD DATA ====================//
 	const slug = (await params).slug; // ❗❗❗
 
-	const res = await fetch(
-		websiteConfig.cmsRootURL + "/api/v1/categories/" + slug
-	);
+	const category = await fetchCategory(slug);
 
-	const category = (await res.json()) as Category;
+	if (!category) return notFound();
 
 	//====================== ITEMS DATA ====================//
 	const itemsType = (await params).items;

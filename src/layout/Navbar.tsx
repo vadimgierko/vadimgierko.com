@@ -20,7 +20,7 @@ import Link from "next/link";
 import { Content, Domain, ItemsType, SocialLinkName, Theme } from "@/types";
 import { ReactNode, useEffect, useState } from "react";
 import { NavDropdown } from "react-bootstrap";
-import { websiteConfig } from "../../website.config";
+import { fetchCategories } from "@/lib/api/v1";
 
 const SOCIAL_LINKS_OBJECTS: { [key in SocialLinkName]: ReactNode } = {
 	facebook: <BsFacebook />,
@@ -68,13 +68,12 @@ export function NavigationBar({
 	}, [LOCAL_STORAGE_THEME_KEY]);
 
 	useEffect(() => {
-		async function fetchCategories() {
-			const res = await fetch(websiteConfig.cmsRootURL + "/api/v1/categories");
-			const data = (await res.json()) as Content["categories"];
+		async function getCategories() {
+			const data = await fetchCategories();
 			setCategories(data);
 		}
 
-		fetchCategories();
+		getCategories();
 	}, []);
 
 	return (
