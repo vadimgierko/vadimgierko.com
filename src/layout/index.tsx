@@ -1,4 +1,4 @@
-import ScrollToTop from "@/components/atoms/ScrollToTop";
+import ScrollToTop from "@/components/ScrollToTop";
 import { ReactNode } from "react";
 import { Footer } from "./Footer";
 import { NavigationBar } from "./Navbar";

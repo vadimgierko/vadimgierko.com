@@ -1,29 +1,21 @@
-// react-bootstrap:
 import Container from "react-bootstrap/Container";
-// content:
-import { icons } from "../../content/icons";
-// custom components:
-// layout:
-import Section from "../../layout/Section";
-// atoms:
-import MarkdownRenderer from "../atoms/MarkdownRenderer";
-import Icon from "../atoms/Icon";
-import YouTubeVideo from "../atoms/YouTubeVideo";
-import SoundCloudAudio from "../atoms/SoundCloudAudio";
-// molecules:
-import CardsList from "../molecules/CardsList";
-import IconsList from "../molecules/IconsList";
-import Gallery from "../molecules/Gallery";
-// react-icons:
+import { icons } from "../content/icons";
+import MarkdownRenderer from "./MarkdownRenderer";
+import Icon from "./Icon";
+import YouTubeVideo from "./YouTubeVideo";
+import SoundCloudAudio from "./SoundCloudAudio";
+import CardsList from "./CardsList";
+import IconsList from "./IconsList";
+import Gallery from "./Gallery";
 import { AiOutlineFolder, AiOutlineYoutube } from "react-icons/ai";
 import { RiArticleLine } from "react-icons/ri";
 import { FaGraduationCap } from "react-icons/fa";
 import { GiMusicalNotes } from "react-icons/gi";
 import { BsImages } from "react-icons/bs";
-// next.js:
 import Link from "next/link";
 import { Audio, Category, Video, ItemsType, Item } from "@/types";
-import { websiteConfig } from "../../../website.config";
+import { websiteConfig } from "../../website.config";
+import { SectionWrapper } from "@/layout/Section";
 
 export async function getFieldItemBySlug({
 	slug,
@@ -95,16 +87,16 @@ export default async function FieldOfInterests({ field }: { field: Category }) {
 			<main>
 				{/** ===================== SKILLS ================== */}
 				{field.props.skills.length > 0 && (
-					<Section>
+					<SectionWrapper>
 						<FaGraduationCap size={80} />
 						<h2 className="text-center my-3">Umiejętności</h2>
 						<IconsList skills={field.props.skills} />
-					</Section>
+					</SectionWrapper>
 				)}
 				{/** ===================== ITEMS (except images) ================== */}
 
 				{field.items.projects.length > 0 && (
-					<Section>
+					<SectionWrapper>
 						<AiOutlineFolder size={80} />
 						<h2 className="text-center my-3">Projekty</h2>
 						<CardsList
@@ -114,10 +106,10 @@ export default async function FieldOfInterests({ field }: { field: Category }) {
 						<Link href={field.metadata.link + "/projects"}>
 							Więcej projektów
 						</Link>
-					</Section>
+					</SectionWrapper>
 				)}
 				{field.items.articles.length > 0 && (
-					<Section>
+					<SectionWrapper>
 						<RiArticleLine size={80} />
 						<h2 className="text-center my-3">Artykuły</h2>
 						<CardsList
@@ -127,10 +119,10 @@ export default async function FieldOfInterests({ field }: { field: Category }) {
 						<Link href={field.metadata.link + "/articles"}>
 							Więcej artykułów
 						</Link>
-					</Section>
+					</SectionWrapper>
 				)}
 				{field.items.videos.length > 0 && (
-					<Section>
+					<SectionWrapper>
 						<AiOutlineYoutube size={80} />
 						<h2 className="text-center my-3">Filmy</h2>
 						{videos.map((v) => {
@@ -148,10 +140,10 @@ export default async function FieldOfInterests({ field }: { field: Category }) {
 							);
 						})}
 						<Link href={field.metadata.link + "/videos"}>Więcej filmów</Link>
-					</Section>
+					</SectionWrapper>
 				)}
 				{field.items.audios.length > 0 && (
-					<Section>
+					<SectionWrapper>
 						<GiMusicalNotes size={80} />
 						<h2 className="text-center my-3">Nagrania</h2>
 						{audios.map((a) => {
@@ -166,19 +158,19 @@ export default async function FieldOfInterests({ field }: { field: Category }) {
 							);
 						})}
 						<Link href={field.metadata.link + "/audios"}>Więcej nagrań</Link>
-					</Section>
+					</SectionWrapper>
 				)}
 
 				{/**========================== IMAGES ====================== */}
 				{field.metadata.link === "/visual-thinking" && (
-					<Section>
+					<SectionWrapper>
 						<BsImages size={80} />
 						<h2 className="text-center my-3">Galeria</h2>
 						{field.items.images && (
 							<Gallery images={field.items.images.slice(0, 4)} />
 						)}
 						<Link href={field.metadata.link + "/images"}>Więcej zdjęć</Link>
-					</Section>
+					</SectionWrapper>
 				)}
 			</main>
 		</>

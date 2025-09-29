@@ -1,6 +1,5 @@
 import { DevProject } from "@/types";
 import { fetchRepoDataFromGitHub } from "./fetchRepoDataFromGitHub";
-import checkGithubApiTokenRateLimits from "./checkGithubApiTokenRateLimits";
 import { fetchRepoReadmeFileContentFromGitHub } from "./fetchRepoReadmeFileContentFromGitHub";
 
 export async function fetchPublicDevProjectData(devProject: DevProject) {
@@ -8,7 +7,7 @@ export async function fetchPublicDevProjectData(devProject: DevProject) {
 	const readmeMarkdown = await fetchRepoReadmeFileContentFromGitHub(
 		repoData.name
 	);
-	await checkGithubApiTokenRateLimits();
+	// await checkGithubApiTokenRateLimits();
 
 	// replace readme's h1 with h2:
 	const fixedMarkdown = readmeMarkdown.replace("#", "##");

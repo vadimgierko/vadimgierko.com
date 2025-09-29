@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Container } from "react-bootstrap";
 
-export default function Section({ children }: {children: ReactNode}) {
+export function SectionWrapper({ children }: { children: ReactNode }) {
 	if (!children) return null;
 
 	return (

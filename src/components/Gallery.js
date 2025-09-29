@@ -4,7 +4,7 @@ import { useState } from "react";
 // react-bootstrap:
 import { Col, Row } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
-import { websiteConfig } from "../../../website.config";
+import { websiteConfig } from "../../website.config";
 
 export default function Gallery({ images }) {
 	const [show, setShow] = useState(false);

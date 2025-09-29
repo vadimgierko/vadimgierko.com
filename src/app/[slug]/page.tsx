@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import FieldOfInterests from "@/components/organisms/Category";
-import Article from "@/components/organisms/Article";
-import Project from "@/components/organisms/Project";
+import FieldOfInterests from "@/components/Category";
+import Article from "@/components/Article";
+import Project from "@/components/Project";
 import { Metadata } from "next";
 import {
 	Article as IArticle,

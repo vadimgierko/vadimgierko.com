@@ -2,9 +2,9 @@
 
 import { Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import Icon from "@/components/atoms/Icon";
+import Icon from "@/components/Icon";
 import { icons } from "@/content/icons";
-import { websiteConfig } from "../../../../website.config";
+import { websiteConfig } from "../../../website.config";
 
 const localStorageThemeKey = websiteConfig.domain.name + "-theme";
 

@@ -1,24 +1,19 @@
-// react bootstrap:
 import Container from "react-bootstrap/Container";
-// custom components:
-// atoms:
-import Icon from "@/components/atoms/Icon";
-import Card from "@/components/atoms/Card";
-import YouTubeVideo from "@/components/atoms/YouTubeVideo";
-import SoundCloudAudio from "@/components/atoms/SoundCloudAudio";
-// molecules:
-import Gallery from "@/components/molecules/Gallery";
-// content:
+import Icon from "@/components/Icon";
+import Card from "@/components/Card";
+import YouTubeVideo from "@/components/YouTubeVideo";
+import SoundCloudAudio from "@/components/SoundCloudAudio";
 import { icons } from "@/content/icons";
 import { notFound } from "next/navigation";
 import { allowedItemsTypes, ItemsType } from "@/types";
-import { getFieldItemBySlug } from "@/components/organisms/Category";
+import { getFieldItemBySlug } from "@/components/Category";
 import {
 	fetchCategories,
 	fetchCategory,
 	fetchPage,
 	fetchPageData,
 } from "@/lib/api/v1";
+import Gallery from "@/components/Gallery";
 
 type ItemsPageParams = { slug: string; items: ItemsType };
 

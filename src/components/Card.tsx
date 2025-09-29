@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col";
 // next.js:
 import Link from "next/link";
 import { Item } from "@/types";
-import { websiteConfig } from "../../../website.config";
+import { websiteConfig } from "../../website.config";
 
 export default function CustomCard({
 	item,
@@ -23,7 +23,9 @@ export default function CustomCard({
 				<Row>
 					{left && (
 						<Col md={6} sm={7}>
-							<Card.Img src={`${websiteConfig.cmsRootURL}/${item.metadata.img.src}`} />
+							<Card.Img
+								src={`${websiteConfig.cmsRootURL}/${item.metadata.img.src}`}
+							/>
 						</Col>
 					)}
 					<Col>
@@ -42,7 +44,9 @@ export default function CustomCard({
 					</Col>
 					{!left && (
 						<Col md={6} sm={7}>
-							<Card.Img src={`${websiteConfig.cmsRootURL}/${item.metadata.img.src}`} />
+							<Card.Img
+								src={`${websiteConfig.cmsRootURL}/${item.metadata.img.src}`}
+							/>
 						</Col>
 					)}
 				</Row>

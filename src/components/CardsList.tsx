@@ -1,4 +1,4 @@
-import Card from "../atoms/Card";
+import Card from "./Card";
 import { Item } from "@/types";
 
 export default function CardsList({

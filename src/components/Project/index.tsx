@@ -1,11 +1,11 @@
 import Container from "react-bootstrap/Container";
 import Image from "react-bootstrap/Image";
-import Section from "@/layout/Section";
-import MarkdownRenderer from "@/components/atoms/MarkdownRenderer";
-import IconsList from "@/components/molecules/IconsList";
+import IconsList from "@/components/IconsList";
 import ProjectExternalLinkButton from "./ProjectExternalLinkButton";
 import { Project as IProject } from "@/types";
-import { websiteConfig } from "../../../../website.config";
+import { websiteConfig } from "../../../website.config";
+import { SectionWrapper } from "@/layout/Section";
+import MarkdownRenderer from "../MarkdownRenderer";
 
 export default function Project({ project }: { project: IProject }) {
 	return (
@@ -29,11 +29,11 @@ export default function Project({ project }: { project: IProject }) {
 					)}
 				</header>
 			</Container>
-			{project.itemType === "devProject" && project.props.skills && (
-				<Section>
+			{project.itemType === "devProject" && (
+				<SectionWrapper>
 					<h3>Tech Stack</h3>
 					<IconsList skills={project.props.skills} />
-				</Section>
+				</SectionWrapper>
 			)}
 			{project.props.content && (
 				<Container className="article py-3" style={{ maxWidth: 900 }}>

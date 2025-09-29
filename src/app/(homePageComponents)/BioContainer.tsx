@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Container, Image } from "react-bootstrap";
-import MarkdownRenderer from "../components/atoms/MarkdownRenderer";
-import { websiteConfig } from "../../website.config";
+import { websiteConfig } from "../../../website.config";
+import MarkdownRenderer from "@/components/MarkdownRenderer";
 
 const bio = {
 	img: `${websiteConfig.cmsRootURL}/vadim-gierko-avatar.jpg`,

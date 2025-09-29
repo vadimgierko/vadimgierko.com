@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { skills as SKILLS } from "../../content/skills";
+import { skills as SKILLS } from "../content/skills";
 import { Skill } from "@/types";
-import Icon from "../atoms/Icon";
+import Icon from "./Icon";
 
 export default function IconsList({ skills }: { skills: string[] }) {
 	const [windowSize, setWindowSize] = useState<number>();

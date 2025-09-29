@@ -3,7 +3,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeHighlight from "rehype-highlight";
 import Link from "next/link";
-import { websiteConfig } from "../../../website.config";
+import { websiteConfig } from "../../website.config";
 
 // convert all internal links into React Router link,
 // open external links in the new tab,
